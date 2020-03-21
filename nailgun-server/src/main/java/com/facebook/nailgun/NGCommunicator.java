@@ -17,7 +17,6 @@
 package com.facebook.nailgun;
 
 import java.io.ByteArrayInputStream;
-import java.io.Closeable;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.EOFException;
@@ -48,7 +47,7 @@ import java.util.logging.Logger;
  * using underlying socket streams. Also handles client disconnect events based on client
  * heartbeats.
  */
-public class NGCommunicator implements Closeable {
+public class NGCommunicator implements AutoCloseable {
 
   private static final Logger LOG = Logger.getLogger(NGCommunicator.class.getName());
   private final ExecutorService orchestratorExecutor;
@@ -349,6 +348,12 @@ public class NGCommunicator implements Closeable {
     } catch (IOException ex) {
       LOG.log(
           Level.WARNING, "Unable to close socket for writing while sending final exit code", ex);
+    }
+
+    try {
+      close();
+    } catch (IOException ex) {
+      LOG.log(Level.WARNING, "Unable to close NGCommunicator after sending final exit code", ex);
     }
   }
 

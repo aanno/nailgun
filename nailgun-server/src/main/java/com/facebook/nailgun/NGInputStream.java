@@ -24,7 +24,7 @@ import java.io.InputStream;
  * Thin layer over NailGun communicator to provide input stream to clients for reading stdin. This
  * stream is thread-safe.
  */
-public class NGInputStream extends InputStream {
+public class NGInputStream extends InputStream implements AutoCloseable {
 
   private final NGCommunicator communicator;
   byte[] buf = new byte[1];
@@ -51,6 +51,7 @@ public class NGInputStream extends InputStream {
   }
 
   /** @see java.io.InputStream#read() */
+  @Override
   public int read() throws IOException {
     // have to synchronize all one byte reads to be able to reuse internal buffer and not
     // recreate new buffer on heap each time
@@ -60,11 +61,13 @@ public class NGInputStream extends InputStream {
   }
 
   /** @see java.io.InputStream#read(byte[]) */
+  @Override
   public int read(byte[] b) throws IOException {
     return read(b, 0, b.length);
   }
 
   /** @see java.io.InputStream#read(byte[], int, int) */
+  @Override
   public int read(byte[] b, int offset, int length) throws IOException {
     try {
       return communicator.receive(b, offset, length);
@@ -72,5 +75,10 @@ public class NGInputStream extends InputStream {
       // return -1 which means no more data in Java stream world, if thread was terminated
       return -1;
     }
+  }
+
+  @Override
+  public void close() throws IOException {
+    communicator.close();
   }
 }

@@ -38,7 +38,7 @@ import java.util.logging.Logger;
 public class NGSession extends Thread {
 
   @FunctionalInterface
-  public interface CommnunicatorCreator {
+  public static interface CommnunicatorCreator {
     NGCommunicator get(Socket socket) throws IOException;
   }
 
