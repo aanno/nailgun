@@ -33,6 +33,12 @@ For more information, see [the nailgun website](https://github.com/facebook/nail
 
 ## Additional information
 
+### Example useage
+
+```bash
+$ ./nailgun-client/target/ng com.facebook.nailgun.examples.ThreadTest
+```
+
 ### Aliases
 
 * Aliases are loaded from `com/facebook/nailgun/builtins/builtins.properties`
@@ -62,8 +68,8 @@ ng-version      com.facebook.nailgun.builtins.NGVersion
                 Displays the server version number.
 ```
 
+The aliases ng-cp and ng-version are _broken_ at present.
+
 ### Links
 
 * [original homepage](http://www.martiansoftware.com/nailgun/)
-
-
