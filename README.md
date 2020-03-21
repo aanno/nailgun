@@ -31,4 +31,39 @@ For additional client implementations in other languages, see:
 
 For more information, see [the nailgun website](https://github.com/facebook/nailgun).
 
+## Additional information
+
+### Aliases
+
+* Aliases are loaded from `com/facebook/nailgun/builtins/builtins.properties`
+* Adding an alias example:
+  ```bash
+  $ ./nailgun-client/target/ng ng-alias test com.facebook.nailgun.examples.ThreadTest
+  $ ./nailgun-client/target/ng test
+  ```
+
+#### Built-in aliases
+
+```bash
+$ ./nailgun-client/target/ng ng-alias
+ng-alias        com.facebook.nailgun.builtins.NGAlias      
+                Displays and manages command aliases
+
+ng-cp           com.facebook.nailgun.builtins.NGClasspath  
+                Displays and manages the current system classpath
+
+ng-stats        com.facebook.nailgun.builtins.NGServerStats
+                Displays nail statistics
+
+ng-stop         com.facebook.nailgun.builtins.NGStop       
+                Shuts down the nailgun server
+
+ng-version      com.facebook.nailgun.builtins.NGVersion    
+                Displays the server version number.
+```
+
+### Links
+
+* [original homepage](http://www.martiansoftware.com/nailgun/)
+
 
