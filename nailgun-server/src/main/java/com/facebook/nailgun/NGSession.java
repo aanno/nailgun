@@ -254,7 +254,9 @@ public class NGSession extends Thread {
           cmdclass = server.getDefaultNailClass();
         }
       } catch (ClassNotFoundException ex) {
-        throw new NGNailNotFoundException("Nail class not found: " + cmdContext.getCommand(), ex);
+        NGNailNotFoundException e = new NGNailNotFoundException("Nail class not found: " + cmdContext.getCommand(), ex);
+        LOG.log(Level.SEVERE, e.toString(), e);
+        throw e;
       }
 
       Object[] methodArgs = new Object[1];
@@ -301,8 +303,10 @@ public class NGSession extends Thread {
             methodArgs[0] = cmdlineArgs;
           } catch (NoSuchMethodException ex) {
             // failed to find 'main' too, so give up and throw
-            throw new NGNailNotFoundException(
+            NGNailNotFoundException e = new NGNailNotFoundException(
                 "Can't find nailMain or main functions in " + cmdclass.getName(), ex);
+            LOG.log(Level.SEVERE, e.toString(), e);
+            throw e;
           }
         }
       }
@@ -312,7 +316,9 @@ public class NGSession extends Thread {
       try {
         mainMethod.invoke(isStaticNail ? null : cmdclass.newInstance(), methodArgs);
       } catch (InvocationTargetException ite) {
-        throw ite.getCause();
+        Throwable e = ite.getCause();
+        LOG.log(Level.SEVERE, "invocation on " + mainMethod + " failed", e);
+        throw e;
       } finally {
         server.nailFinished(cmdclass);
       }
