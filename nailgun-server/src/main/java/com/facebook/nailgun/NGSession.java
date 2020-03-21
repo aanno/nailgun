@@ -254,7 +254,8 @@ public class NGSession extends Thread {
           cmdclass = server.getDefaultNailClass();
         }
       } catch (ClassNotFoundException ex) {
-        NGNailNotFoundException e = new NGNailNotFoundException("Nail class not found: " + cmdContext.getCommand(), ex);
+        NGNailNotFoundException e =
+            new NGNailNotFoundException("Nail class not found: " + cmdContext.getCommand(), ex);
         LOG.log(Level.SEVERE, e.toString(), e);
         throw e;
       }
@@ -283,11 +284,8 @@ public class NGSession extends Thread {
       } else {
         try {
           mainMethod = cmdclass.getMethod("nailMain", nailMainSignature);
-          NGContext context = new NGContext();
+          NGContext context = new NGContext(in, out, err);
           context.setArgs(cmdlineArgs);
-          context.in = in;
-          context.out = out;
-          context.err = err;
           context.setCommand(cmdContext.getCommand());
           context.setNGServer(server);
           context.setCommunicator(comm);
@@ -303,8 +301,9 @@ public class NGSession extends Thread {
             methodArgs[0] = cmdlineArgs;
           } catch (NoSuchMethodException ex) {
             // failed to find 'main' too, so give up and throw
-            NGNailNotFoundException e = new NGNailNotFoundException(
-                "Can't find nailMain or main functions in " + cmdclass.getName(), ex);
+            NGNailNotFoundException e =
+                new NGNailNotFoundException(
+                    "Can't find nailMain or main functions in " + cmdclass.getName(), ex);
             LOG.log(Level.SEVERE, e.toString(), e);
             throw e;
           }
