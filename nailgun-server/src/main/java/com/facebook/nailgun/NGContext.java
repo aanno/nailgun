@@ -17,7 +17,6 @@
 
 package com.facebook.nailgun;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
 import java.net.InetAddress;
@@ -41,7 +40,7 @@ import java.util.Properties;
  *
  * @author <a href="http://www.martiansoftware.com/contact.html">Marty Lamb </a>
  */
-public class NGContext implements AutoCloseable {
+public class NGContext {
 
   /** The remote host's environment variables */
   private Properties remoteEnvironment = null;
@@ -245,11 +244,6 @@ public class NGContext implements AutoCloseable {
    */
   public void exit(int exitCode) {
     communicator.exit(exitCode);
-  }
-
-  @Override
-  public void close() throws IOException {
-    communicator.close();
   }
 
   /**

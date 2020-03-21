@@ -24,7 +24,7 @@ import java.io.OutputStream;
  * stdout/stderr. This stream is NOT thread-safe, use PrintStream or similar decorator to make it
  * such
  */
-class NGOutputStream extends OutputStream implements AutoCloseable {
+class NGOutputStream extends OutputStream {
 
   private final byte streamCode;
   private final NGCommunicator communicator;
@@ -60,10 +60,5 @@ class NGOutputStream extends OutputStream implements AutoCloseable {
   @Override
   public void write(byte[] b, int offset, int len) throws IOException {
     communicator.send(streamCode, b, offset, len);
-  }
-
-  @Override
-  public void close() throws IOException {
-    communicator.close();
   }
 }
