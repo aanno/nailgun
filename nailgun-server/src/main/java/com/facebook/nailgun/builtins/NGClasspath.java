@@ -20,9 +20,14 @@ Copyright 2017-Present Facebook, Inc
 package com.facebook.nailgun.builtins;
 
 import com.facebook.nailgun.NGContext;
+import com.facebook.nailgun.NGSession;
+
 import java.io.File;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.security.SecureClassLoader;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Provides a means to display and add to the system classpath at runtime. If called with no
@@ -35,6 +40,8 @@ import java.net.URLClassLoader;
  * @author <a href="http://www.martiansoftware.com/contact.html">Marty Lamb</a>
  */
 public class NGClasspath {
+
+  private static final Logger LOG = Logger.getLogger(NGClasspath.class.getName());
 
   /**
    * Adds the specified URL (for a jar or a directory) to the System ClassLoader. This code was
@@ -59,15 +66,32 @@ public class NGClasspath {
   public static void nailMain(NGContext context) throws Exception {
     String[] args = context.getArgs();
     if (args.length == 0) {
-      URLClassLoader sysLoader = (URLClassLoader) ClassLoader.getSystemClassLoader();
-      URL[] urls = sysLoader.getURLs();
-      for (int i = 0; i < urls.length; ++i) {
-        context.getOut().println(urls[i]);
+      ClassLoader cl = Thread.currentThread().getContextClassLoader();
+      if (cl instanceof URLClassLoader) {
+        URLClassLoader sysLoader = (URLClassLoader) ClassLoader.getSystemClassLoader();
+        URL[] urls = sysLoader.getURLs();
+        for (int i = 0; i < urls.length; ++i) {
+          context.getOut().println(urls[i]);
+        }
+      } else {
+        context.getOut().println("context classloader: " + cl);
+        context.getOut().println("NGClasspath protection domain: " +
+                NGClasspath.class.getProtectionDomain());
+        do {
+          cl = cl.getParent();
+          context.getOut().println("parent classloader: " + cl);
+        } while (cl != null);
       }
     } else {
+      // TODO tp: EXTREMELY DANGEROUS, HENCE DISABLED
+      /*
       for (int i = 0; i < args.length; ++i) {
         File file = new File(args[i]);
         addToSystemClassLoader(file.toURL());
+      }
+       */
+      if (args.length > 0) {
+        LOG.log(Level.SEVERE, "ng-cp classpath changes have been disabled for security");
       }
     }
     context.getOut().flush();

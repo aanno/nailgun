@@ -68,7 +68,7 @@ ng-version      com.facebook.nailgun.builtins.NGVersion
                 Displays the server version number.
 ```
 
-The alias ng-cp is _broken_ at present.
+The alias ng-cp was _very_ dangerous and has been disabled.
 
 ### Links
 
