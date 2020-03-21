@@ -383,6 +383,7 @@ public class NGCommunicator implements Closeable {
     if (outClosed) {
       return;
     }
+    out.flush();
     outClosed = true;
 
     LOG.log(Level.FINE, "Shutting down socket for output");

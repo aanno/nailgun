@@ -65,7 +65,10 @@ class ThreadLocalPrintStream extends PrintStream {
    */
   PrintStream getPrintStream() {
     PrintStream result = (PrintStream) streams.get();
-    return ((result == null) ? defaultPrintStream : result);
+    if (result == null || result.checkError()) {
+      result = defaultPrintStream;
+    }
+    return result;
   }
 
   //  BEGIN delegated java.io.PrintStream methods
