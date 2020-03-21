@@ -88,7 +88,7 @@ public class NGConstants {
     if (VERSION == null) {
       Properties props = new Properties();
       URL url =
-          NGConstants.class.getResource(
+          NGServer.getInstance().getClassLoader().getResource(
               "META-INF/maven/com.facebook/nailgun-server/pom.properties");
       if (url == null) {
         File file = new File("target/maven-archiver/pom.properties");
